@@ -1,62 +1,90 @@
 <!DOCTYPE html>
 <html>
+<!-- Define the document type and root HTML element -->
 
 <head>
+    <!-- Set the page title displayed in the browser tab -->
     <title>Velvet Touch Salon - Main Dashboard</title>
+
+    <!-- Link to an external stylesheet for consistent styling across the site -->
     <link rel="stylesheet" href="/style/style.css">
+
+    <!-- Link to an external JavaScript file for additional functionality (e.g., login-related logic) -->
     <script src="/javascript/login.js"></script>
 </head>
 
 <body>
+    <!-- Header section containing the navigation bar -->
     <header class="header">
+        <!-- Navigation bar with links and branding -->
         <nav class="navbar">
             <div class="nav-links">
-                <a href="/hairdresser/dashboard">Dashboard</a>
-                <a href="/hairdresser/services">Services</a>
-                <a href="/hairdresser/schedule">Schedule</a>
-                <a href="/hairdresser/clients">Clients</a>
+                <!-- Links to key pages in the hairdresser dashboard -->
+                <a href="/hairdresser/dashboard">Dashboard</a> <!-- Link to the main dashboard -->
+                <a href="/hairdresser/services">Services</a> <!-- Link to manage services -->
+                <a href="/hairdresser/schedule">Schedule</a> <!-- Link to manage appointments -->
+                <a href="/hairdresser/clients">Clients</a> <!-- Link to manage clients -->
+                <!-- Placeholder for dynamic authentication links (e.g., login/logout) -->
                 <a id="auth-links"></a>
             </div>
+            <!-- Salon branding/logo displayed in the navigation bar -->
             <div class="logo">Velvet Touch Salon</div>
         </nav>
     </header>
 
+    <!-- Main dashboard content with a grid of navigation cards -->
     <div class="dashboard">
+        <!-- Grid container for dashboard cards -->
         <div class="grid">
+            <!-- Card linking to the Clients page -->
             <a href="/hairdresser/clients" class="card">
-                <div class="icon">👥</div>
-                <h2>Clients</h2>
-                <p>Manage client information</p>
+                <div class="icon">👥</div> <!-- Emoji icon representing clients -->
+                <h2>Clients</h2> <!-- Card title -->
+                <p>Manage client information</p> <!-- Card description -->
             </a>
+            <!-- Card linking to the Services page -->
             <a href="/hairdresser/services" class="card">
-                <div class="icon">✂️</div>
-                <h2>Services</h2>
-                <p>View and edit salon services</p>
+                <div class="icon">✂️</div> <!-- Emoji icon representing services -->
+                <h2>Services</h2> <!-- Card title -->
+                <p>View and edit salon services</p> <!-- Card description -->
             </a>
+            <!-- Card linking to the Schedule page -->
             <a href="/hairdresser/schedule" class="card">
-                <div class="icon">📅</div>
-                <h2>Schedule</h2>
-                <p>Manage appointments</p>
+                <div class="icon">📅</div> <!-- Emoji icon representing schedule -->
+                <h2>Schedule</h2> <!-- Card title -->
+                <p>Manage appointments</p> <!-- Card description -->
             </a>
+            <!-- Card for About information (currently a placeholder link) -->
             <a href="#" class="card">
-                <div class="icon">ℹ️</div>
-                <h2>About</h2>
-                <p>Learn about our salon</p>
+                <div class="icon">ℹ️</div> <!-- Emoji icon representing about info -->
+                <h2>About</h2> <!-- Card title -->
+                <p>Learn about our salon</p> <!-- Card description -->
             </a>
+            <!-- Card for Location information (currently a placeholder link) -->
             <a href="#" class="card">
-                <div class="icon">📍</div>
-                <h2>Location</h2>
-                <p>Find our salon</p>
+                <div class="icon">📍</div> <!-- Emoji icon representing location -->
+                <h2>Location</h2> <!-- Card title -->
+                <p>Find our salon</p> <!-- Card description -->
             </a>
         </div>
     </div>
 
+    <!-- Inline JavaScript for enhancing accessibility -->
     <script>
-        // No dynamic data needed for this static navigation page
-        // Adding click handlers for accessibility
+        // Comment: Note that no dynamic data is needed for this static navigation page
+        // Comment: Adding click handlers to improve accessibility for keyboard users
+
+        /*
+         * Set up keyboard navigation for dashboard cards to improve accessibility.
+         * This ensures that users can navigate to linked pages by pressing Enter or Space,
+         * making the dashboard usable via keyboard input.
+         */
         document.querySelectorAll('.card').forEach(card => {
+            // Add a keypress event listener to each card element
             card.addEventListener('keypress', (e) => {
+                // Check if the pressed key is Enter or Space
                 if (e.key === 'Enter' || e.key === ' ') {
+                    // Navigate to the URL specified in the card's href attribute
                     window.location.href = card.getAttribute('href');
                 }
             });

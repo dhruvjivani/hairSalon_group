@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Stylists</title>
     <link rel="stylesheet" href="/style/style.css">
 </head>
+
 <body>
     <header>
         <h1>Our Stylists</h1>
@@ -63,6 +65,11 @@
             `;
         }
 
+        /*
+         * Initialize the stylists page by fetching stylist data and setting up navigation.
+         * This script handles loading stylists, displaying their details, and navigating
+         * between stylists using previous and next buttons.
+         */
         document.addEventListener('DOMContentLoaded', () => {
             fetchStylists();
 
@@ -78,4 +85,5 @@
         });
     </script>
 </body>
+
 </html>

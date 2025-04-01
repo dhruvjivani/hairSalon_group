@@ -1,85 +1,123 @@
 <!DOCTYPE html>
 <html>
+<!-- Define the document type and root HTML element -->
 
 <head>
+    <!-- Set the page title displayed in the browser tab -->
     <title>Edit Service</title>
-    <link rel="stylesheet" href="/style/style.css">
-    <script src="/javascript/login.js"></script>
 
+    <!-- Link to an external stylesheet for consistent styling across the site -->
+    <link rel="stylesheet" href="/style/style.css">
+
+    <!-- Link to an external JavaScript file for additional functionality (e.g., login-related logic) -->
+    <script src="/javascript/login.js"></script>
 </head>
 
 <body>
+    <!-- Header section containing the page title and navigation -->
     <header>
+        <!-- Top bar displaying the page's purpose -->
         <div class="top-bar">Edit Service</div>
+
+        <!-- Navigation bar with links to other sections of the site -->
         <nav class="navbar">
             <div class="nav-links">
+                <!-- Links to key pages in the hairdresser dashboard -->
                 <a href="/hairdresser/dashboard">Dashboard</a>
                 <a href="/hairdresser/clients">Clients</a>
                 <a href="/hairdresser/services">Services</a>
                 <a href="/hairdresser/schedule">Schedule</a>
+                <!-- Placeholder for dynamic authentication links (e.g., login/logout) -->
                 <a id="auth-links"></a>
             </div>
+            <!-- Salon branding/logo displayed in the navigation bar -->
             <div class="logo">Velvet Touch Salon</div>
         </nav>
     </header>
+
+    <!-- Table-based form for editing an existing service -->
     <table class="form-table">
         <tbody>
+            <!-- Row for service name input -->
             <tr>
-                <td><label for="name">Service Name:</label></td>
+                <td><label for="name">Service Name:</label></td> <!-- Label for accessibility -->
                 <td><input type="text" id="name" name="name" required></td>
+                <!-- Required text input for service name -->
             </tr>
+            <!-- Row for service description input -->
             <tr>
-                <td><label for="description">Description:</label></td>
+                <td><label for="description">Description:</label></td> <!-- Label for accessibility -->
                 <td><input type="text" id="description" name="description"></td>
+                <!-- Optional text input for description -->
             </tr>
+            <!-- Row for service price input -->
             <tr>
-                <td><label for="price">Price:</label></td>
+                <td><label for="price">Price:</label></td> <!-- Label for accessibility -->
                 <td><input type="number" id="price" name="price" step="0.01" required></td>
+                <!-- Required number input with decimal precision -->
             </tr>
+            <!-- Row for the submit button -->
             <tr>
-                <td colspan="2">
+                <td colspan="2"> <!-- Span across two columns for centering -->
+                    <!-- Button to submit the form, styled with classes and an ID for event handling -->
                     <button class="btn yes-btn" id="submitBtn">Update Service</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <!-- Inline JavaScript for handling service data loading and form submission -->
     <script>
+        // Wait for the DOM to fully load before executing the script
         document.addEventListener('DOMContentLoaded', async () => {
+            // Extract the service ID from the URL path (e.g., /edit/:id)
             const id = window.location.pathname.split('/').pop();
 
+            // Load existing service data to pre-fill the form
             try {
+                // Make an asynchronous GET request to fetch service details
                 const response = await fetch(`/api/services/${id}`);
-                const service = await response.json();
+                const service = await response.json(); // Parse the JSON response
 
+                // Pre-fill form inputs with service data, defaulting to empty string if null
                 document.getElementById('name').value = service.name || '';
                 document.getElementById('description').value = service.description || '';
                 document.getElementById('price').value = service.price || '';
             } catch (error) {
-                console.error('Error loading service:', error);
+                // Handle errors during the fetch request
+                console.error('Error loading service:', error); // Log error for debugging
             }
 
+            // Add an event listener to the submit button for form submission
             document.getElementById('submitBtn').addEventListener('click', async (e) => {
+                // Prevent the default form submission behavior (e.g., page reload)
                 e.preventDefault();
+
+                // Create an object with updated service data from the form inputs
                 const serviceData = {
-                    name: document.getElementById('name').value,
-                    description: document.getElementById('description').value,
-                    price: parseFloat(document.getElementById('price').value)
+                    name: document.getElementById('name').value, // Get the updated service name
+                    description: document.getElementById('description').value, // Get the updated description
+                    price: parseFloat(document.getElementById('price').value) // Get the updated price as a float
                 };
 
+                // Attempt to send the updated service data to the server
                 try {
+                    // Make an asynchronous POST request to the '/api/services/edit/:id' endpoint
                     const response = await fetch(`/api/services/edit/${id}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(serviceData)
+                        method: 'POST', // Use POST method to send data
+                        headers: { 'Content-Type': 'application/json' }, // Specify that the request body is JSON
+                        body: JSON.stringify(serviceData) // Convert service data object to JSON string
                     });
 
+                    // Check if the server redirected (indicating success)
                     if (response.redirected) {
+                        // Navigate to the services page
                         window.location.href = '/hairdresser/services';
                     }
                 } catch (error) {
-                    console.error('Error updating service:', error);
-                    alert('Failed to update service');
+                    // Handle errors during the fetch request
+                    console.error('Error updating service:', error); // Log error for debugging
+                    alert('Failed to update service'); // Notify the user of failure
                 }
             });
         });

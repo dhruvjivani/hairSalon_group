@@ -62,30 +62,6 @@ function login() {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", function () {
-//   const authLinks = document.getElementById("auth-links");
-
-//   const isLoggedIn = localStorage.getItem("isLoggedIn");
-//   const role = localStorage.getItem("role");
-
-//   if (isLoggedIn === "true") {
-//     authLinks.innerHTML = `<a href="#" id="logout">Logout</a>`;
-
-//     document.getElementById("logout").addEventListener("click", function () {
-//       localStorage.removeItem("isLoggedIn");
-//       localStorage.removeItem("role"); // Clear role data on logout
-//       window.location.href = "/";
-//     });
-
-//     // Role-based dashboard redirection (optional)
-//     if (role === "hairdresser") {
-//       document.getElementById("auth-links").innerHTML += `<a href="/hairdresser/dashboard">Dashboard</a>`;
-//     }
-//   } else {
-//     authLinks.innerHTML = `<a href="/signup">Login</a>`;
-//   }
-// });
-
 document.addEventListener("DOMContentLoaded", function () {
   const authLinks = document.getElementById("auth-links");
 

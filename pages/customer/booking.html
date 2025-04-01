@@ -62,6 +62,11 @@
                 console.error('Error loading booking options:', error);
             }
 
+            /*
+             * Handle the form submission to book an appointment.
+             * This section collects form data, sends it to the server via POST request,
+             * and redirects to a confirmation page on success or shows an error alert.
+             */
             // Handle booking submission
             document.getElementById('booking-form').addEventListener('submit', async (e) => {
                 e.preventDefault();

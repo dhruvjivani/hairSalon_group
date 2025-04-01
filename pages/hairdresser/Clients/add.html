@@ -1,73 +1,107 @@
 <!DOCTYPE html>
 <html>
+<!-- Define the document type and root HTML element -->
 
 <head>
+    <!-- Set the page title displayed in the browser tab -->
     <title>Add Client</title>
+
+    <!-- Link to an external stylesheet for consistent styling across the site -->
     <link rel="stylesheet" href="/style/style.css">
-    <!-- Link to external JavaScript file for additional functionality -->
+
+    <!-- Link to an external JavaScript file for additional functionality (e.g., login-related logic) -->
     <script src="/javascript/login.js"></script>
 </head>
 
 <body>
+    <!-- Header section containing the page title and navigation -->
     <header>
+        <!-- Top bar displaying the page's purpose -->
         <div class="top-bar">Add New Client</div>
+
+        <!-- Navigation bar with links to other sections of the site -->
         <nav class="navbar">
             <div class="nav-links">
+                <!-- Links to key pages in the hairdresser dashboard -->
                 <a href="/hairdresser/dashboard">Dashboard</a>
                 <a href="/hairdresser/services">Services</a>
                 <a href="/hairdresser/schedule">Schedule</a>
                 <a href="/hairdresser/clients">Clients</a>
+                <!-- Placeholder for dynamic authentication links (e.g., login/logout) -->
                 <a id="auth-links"></a>
             </div>
+            <!-- Salon branding/logo displayed in the navigation bar -->
             <div class="logo">Velvet Touch Salon</div>
         </nav>
     </header>
+
+    <!-- Table-based form for adding a new client -->
     <table class="form-table">
         <tbody>
+            <!-- Row for client name input -->
             <tr>
-                <td><label for="name">Name:</label></td>
+                <td><label for="name">Name:</label></td> <!-- Label for accessibility -->
                 <td><input type="text" id="name" name="name" required></td>
+                <!-- Required text input for client's name -->
             </tr>
+            <!-- Row for client phone input -->
             <tr>
-                <td><label for="phone">Phone:</label></td>
-                <td><input type="tel" id="phone" name="phone"></td>
+                <td><label for="phone">Phone:</label></td> <!-- Label for accessibility -->
+                <td><input type="tel" id="phone" name="phone"></td> <!-- Telephone input for client's phone number -->
             </tr>
+            <!-- Row for client email input -->
             <tr>
-                <td><label for="email">Email:</label></td>
-                <td><input type="email" id="email" name="email"></td>
+                <td><label for="email">Email:</label></td> <!-- Label for accessibility -->
+                <td><input type="email" id="email" name="email"></td> <!-- Email input for client's email address -->
             </tr>
+            <!-- Row for the submit button -->
             <tr>
-                <td colspan="2">
+                <td colspan="2"> <!-- Span across two columns for centering -->
+                    <!-- Button to submit the form, styled with classes and an ID for event handling -->
                     <button class="btn yes-btn" id="submitBtn">Add Client</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <!-- Inline JavaScript for handling form submission -->
     <script>
+        /*
+         * Handle the submission of the client addition form.
+         * This script collects client data (name, phone, email), sends it to the server via POST,
+         * and redirects or shows an error message based on the response.
+         */
         document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            // Prevent the default form submission behavior (e.g., page reload)
             e.preventDefault();
+
+            // Create an object with client data from the form inputs
             const clientData = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value
+                name: document.getElementById('name').value, // Get the entered name
+                phone: document.getElementById('phone').value, // Get the entered phone number
+                email: document.getElementById('email').value // Get the entered email
             };
 
+            // Attempt to send the client data to the server
             try {
+                // Make an asynchronous POST request to the '/add' endpoint
                 const response = await fetch('/add', {
-                    method: 'POST',
+                    method: 'POST', // Use POST method to send data
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json', // Specify that the request body is JSON
                     },
-                    body: JSON.stringify(clientData)
+                    body: JSON.stringify(clientData) // Convert client data object to JSON string
                 });
 
+                // Check if the server redirected (indicating success)
                 if (response.redirected) {
+                    // Navigate to the URL provided by the server's redirect response
                     window.location.href = response.url;
                 }
             } catch (error) {
-                console.error('Error adding client:', error);
-                alert('Failed to add client');
+                // Handle any errors that occur during the fetch request
+                console.error('Error adding client:', error); // Log the error to the console for debugging
+                alert('Failed to add client'); // Notify the user of the failure
             }
         });
     </script>

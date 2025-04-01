@@ -1,90 +1,124 @@
 <!DOCTYPE html>
 <html>
+<!-- Define the document type and root HTML element -->
 
 <head>
-    <title>Edit Client</title>
+    <!-- Set the page title displayed in the browser tab -->
+    <title>Hairdresser Dashboard</title>
+
+    <!-- Link to an external stylesheet for consistent styling across the site -->
     <link rel="stylesheet" href="/style/style.css">
 
-    <!-- Link to external JavaScript file for additional functionality -->
+    <!-- Link to an external JavaScript file for additional functionality (e.g., login-related logic) -->
     <script src="/javascript/login.js"></script>
 </head>
 
 <body>
+    <!-- Header section containing the dashboard title and navigation -->
     <header>
-        <div class="top-bar">Edit Client</div>
+        <!-- Top bar displaying the page's purpose -->
+        <div class="top-bar">Hairdresser Dashboard</div>
+
+        <!-- Navigation bar with links to other sections of the site -->
         <nav class="navbar">
             <div class="nav-links">
+                <!-- Links to key pages in the hairdresser dashboard -->
                 <a href="/hairdresser/dashboard">Dashboard</a>
-                <a href="/hairdresser/clients">Clients</a>
                 <a href="/hairdresser/services">Services</a>
                 <a href="/hairdresser/schedule">Schedule</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <!-- Placeholder for dynamic authentication links (e.g., login/logout) -->
                 <a id="auth-links"></a>
             </div>
+            <!-- Salon branding/logo displayed in the navigation bar -->
             <div class="logo">Velvet Touch Salon</div>
         </nav>
     </header>
-    <table class="form-table">
-        <tbody>
+
+    <!-- Button to navigate to the "Add New Client" page -->
+    <button class="btn yes-btn" onclick="window.location.href='/hairdresser/clients/add'" style="margin: 10px;">
+        Add New Clients
+    </button>
+
+    <!-- Table to display the list of clients -->
+    <table id="appointmentsTable">
+        <thead>
+            <!-- Table header row defining column titles -->
             <tr>
-                <td><label for="name">Name:</label></td>
-                <td><input type="text" id="name" name="name" required></td>
+                <th>Name</th> <!-- Column for client name -->
+                <th>Phone</th> <!-- Column for client phone number -->
+                <th>Email</th> <!-- Column for client email -->
+                <th>Actions</th> <!-- Column for edit/delete actions -->
             </tr>
-            <tr>
-                <td><label for="phone">Phone:</label></td>
-                <td><input type="tel" id="phone" name="phone"></td>
-            </tr>
-            <tr>
-                <td><label for="email">Email:</label></td>
-                <td><input type="email" id="email" name="email"></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button class="btn yes-btn" id="submitBtn">Update Client</button>
-                </td>
-            </tr>
-        </tbody>
+        </thead>
+        <!-- Table body where client data will be dynamically inserted -->
+        <tbody id="appointmentBody"></tbody>
     </table>
 
+    <!-- Inline JavaScript for handling dashboard initialization and client management -->
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const id = window.location.pathname.split('/').pop();
+        // Wait for the DOM to fully load before executing the script
+        document.addEventListener('DOMContentLoaded', () => {
+            /*
+             * Initialize the dashboard by fetching and displaying all clients.
+             * This script retrieves client data from the server, populates a table with their details,
+             * and sets up functionality for editing and deleting clients.
+             */
+            fetchClients(); // Call the function to fetch and display clients
 
-            try {
-                const response = await fetch(`/api/clients/${id}`);
-                const client = await response.json();
+            // Function to fetch client data from the server and populate the table
+            async function fetchClients() {
+                try {
+                    // Make an asynchronous GET request to retrieve client data
+                    const response = await fetch('/api/clients');
+                    const clients = await response.json(); // Parse the JSON response into an array
 
-                document.getElementById('name').value = client.name || '';
-                document.getElementById('phone').value = client.phone || '';
-                document.getElementById('email').value = client.email || '';
-            } catch (error) {
-                console.error('Error loading client:', error);
+                    // Get the table body element where client rows will be inserted
+                    const appointmentBody = document.getElementById('appointmentBody');
+
+                    // Generate table rows for each client and insert them into the table body
+                    appointmentBody.innerHTML = clients.map(client => `
+                        <tr data-id="${client._id}">
+                            <td>${client.name || ''}</td> <!-- Display name, or empty string if null -->
+                            <td>${client.phone || 'N/A'}</td> <!-- Display phone, or 'N/A' if null -->
+                            <td>${client.email || 'N/A'}</td> <!-- Display email, or 'N/A' if null -->
+                            <td>
+                                <!-- Edit button redirects to the edit page for this client -->
+                                <button class="btn yes-btn" onclick="window.location.href='/hairdresser/edit/${client._id}'">Edit</button>
+                                <!-- Delete button triggers the deleteClient function -->
+                                <button class="btn no-btn" onclick="deleteClient('${client._id}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join(''); // Join rows into a single string
+                } catch (error) {
+                    // Handle errors during the fetch request
+                    console.error('Error fetching clients:', error); // Log error for debugging
+                    appointmentBody.innerHTML = '<tr><td colspan="4">Error loading clients</td></tr>'; // Display error message in table
+                }
             }
 
-            document.getElementById('submitBtn').addEventListener('click', async (e) => {
-                e.preventDefault();
-                const clientData = {
-                    name: document.getElementById('name').value,
-                    phone: document.getElementById('phone').value,
-                    email: document.getElementById('email').value
-                };
+            // Function to delete a client, exposed globally so it can be called from button onclick
+            window.deleteClient = async function (id) {
+                // Prompt the user to confirm deletion
+                if (confirm('Are you sure you want to delete this client?')) {
+                    try {
+                        // Make an asynchronous DELETE request to remove the client
+                        const response = await fetch(`/delete/${id}`, {
+                            method: 'DELETE' // Specify DELETE method
+                        });
+                        const result = await response.json(); // Parse the JSON response
 
-                try {
-                    const response = await fetch(`/edit/${id}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(clientData)
-                    });
-
-                    if (response.redirected) {
-                        window.location.href = response.url;
+                        // If deletion was successful, refresh the client list
+                        if (result.message) {
+                            fetchClients(); // Re-fetch and update the table
+                        }
+                    } catch (error) {
+                        // Handle errors during the delete request
+                        console.error('Error deleting client:', error); // Log error for debugging
+                        alert('Failed to delete client'); // Notify the user of failure
                     }
-                } catch (error) {
-                    console.error('Error updating client:', error);
-                    alert('Failed to update client');
                 }
-            });
+            };
         });
     </script>
 </body>

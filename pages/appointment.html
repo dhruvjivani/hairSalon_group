@@ -7,10 +7,6 @@
     <title>Select Stylist and Services</title>
     <link rel="stylesheet" href="../style/style.css">
     <script src="/javascript/login.js"></script>
-
-    <style>
-     
-    </style>
 </head>
 
 <body>
@@ -95,7 +91,6 @@
                 stylistSelect.innerHTML = '<option value="" disabled selected>Select a stylist</option>';
                 stylists.forEach(stylist => {
                     const option = document.createElement('option');
-                    // console.log(stylist._id)
                     option.value = stylist._id || ''; // Ensure value is set, default to empty string if null
                     option.textContent = stylist.name;
                     stylistSelect.appendChild(option);
@@ -185,6 +180,11 @@
                 displayServiceDetails(serviceId);
             });
 
+            /*
+             * Handle the submission of the appointment scheduling form.
+             * This script collects scheduling data (stylist, service, date, time, customer details), sends it to the server via POST,
+             * and displays a confirmation message or error, with a redirect after success.
+             */
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const formData = new FormData(form);

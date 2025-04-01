@@ -2,87 +2,138 @@
 <html lang="en">
 
 <head>
+    <!-- Define character encoding and viewport for responsive design -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
+    <!-- Link to external stylesheet for styling -->
     <link rel="stylesheet" href="/style/signup.css">
+
+    <!-- Inline CSS to style the input fields specifically for this page -->
     <style>
+        /* Style input fields within the login container */
         .login-container input {
             width: 100%;
+            /* Full width of the parent container */
             padding: 12px 15px;
+            /* Padding for better spacing inside the input */
             margin-bottom: 15px;
+            /* Space between inputs */
             border: 2px solid #e0e0e0;
+            /* Light gray border */
             border-radius: 8px;
+            /* Rounded corners for a modern look */
             font-size: 1rem;
+            /* Standard font size */
             color: #333;
+            /* Dark text color for readability */
             background: #f8f9fa;
+            /* Light background for contrast */
             transition: all 0.3s ease;
+            /* Smooth transition for hover/focus effects */
             box-sizing: border-box;
+            /* Include padding and border in the element's total width */
         }
     </style>
+
+    <!-- Link to external JavaScript file for additional functionality, loaded defer to ensure DOM is ready -->
     <script src="/javascript/forgotpass.js" defer></script>
 </head>
 
 <body>
+    <!-- Header section with navigation and branding -->
     <header>
+        <!-- Top bar displaying a welcome message -->
         <div class="top-bar">Welcome to Hair & Beauty Salon</div>
+
+        <!-- Navigation bar with links and logo -->
         <nav class="navbar">
             <div class="nav-links">
+                <!-- Navigation links for the site -->
                 <a href="/">Home</a>
                 <a href="/about">About</a>
                 <a href="/service">Services</a>
                 <a href="/location">Location</a>
-                <a id="auth-links"></a>
+                <a id="auth-links"></a> <!-- Placeholder for authentication links -->
             </div>
-            <div class="logo">Velvet Touch Salon</div>
+            <div class="logo">Velvet Touch Salon</div> <!-- Salon logo or name -->
         </nav>
     </header>
 
+    <!-- Main content container for the forgot password form -->
     <div class="container">
         <div class="login-container">
+            <!-- Heading for the forgot password section -->
             <h2>Forgot Password</h2>
+
+            <!-- Instructional text for the user -->
             <p>Please enter your username or email to reset your password.</p>
+
+            <!-- Input field for username or email -->
             <input type="text" id="forgotUsername" placeholder="Enter username or email" required>
+
+            <!-- Button to trigger password reset -->
             <button type="button" onclick="resetPassword()">Reset Password</button>
+
+            <!-- Button to return to login page -->
             <button style="background-color: #222;" onclick="window.location.href='/login'">Back to Login</button>
+
+            <!-- Paragraph to display reset status messages -->
             <p id="resetMessage"></p>
+
+            <!-- Link back to login if password is remembered -->
             <p>Remembered your password? <a href="/login">Login here</a></p>
         </div>
     </div>
 
+    <!-- Footer with copyright information -->
     <footer>
         <p>© Salon - All Rights Reserved</p>
     </footer>
+
+    <!-- Inline JavaScript for handling the password reset functionality -->
     <script>
-        // forgotpass.js
+        // Comment: Main function to handle the password reset process
+        // This function is triggered when the "Reset Password" button is clicked
         function resetPassword() {
+            // Get the value entered in the username/email input field
             const username = document.getElementById('forgotUsername').value;
+
+            // Get the element where messages will be displayed
             const message = document.getElementById('resetMessage');
 
+            // Validate that a username or email was entered
             if (!username) {
+                // If no input, show an error message in red
                 message.style.color = 'red';
                 message.textContent = 'Please enter a username or email.';
-                return;
+                return; // Exit the function if validation fails
             }
 
-            // Simulate an API call (replace with actual backend logic)
+            // Simulate sending a reset link (this is a placeholder for actual backend integration)
+            // In a real application, this would call an API to send a reset email
             message.style.color = 'green';
             message.textContent = 'If an account exists, a reset link has been sent to your email.';
+
+            // Clear the input field after submission
             document.getElementById('forgotUsername').value = '';
 
-            // Example API call (uncomment and adjust for your backend)
+            // Comment: Example of how an actual API call would look (currently commented out)
+            // This block shows how to integrate with a backend API for password reset
             /*
             fetch('/api/reset-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                method: 'POST', // HTTP method for sending data
+                headers: { 'Content-Type': 'application/json' }, // Specify JSON content
+                body: JSON.stringify({ username }) // Convert data to JSON format
             })
-            .then(response => response.json())
+            .then(response => response.json()) // Parse the JSON response
             .then(data => {
+                // Update message based on success or failure
                 message.style.color = data.success ? 'green' : 'red';
                 message.textContent = data.message;
             })
             .catch(error => {
+                // Handle any errors from the fetch request
                 message.style.color = 'red';
                 message.textContent = 'An error occurred. Please try again.';
             });

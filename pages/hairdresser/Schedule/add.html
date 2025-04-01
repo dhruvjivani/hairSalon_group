@@ -1,80 +1,116 @@
 <!DOCTYPE html>
 <html>
+<!-- Define the document type and root HTML element -->
 
 <head>
+    <!-- Set the page title displayed in the browser tab -->
     <title>Add Appointment</title>
+    
+    <!-- Link to an external stylesheet for consistent styling across the site -->
     <link rel="stylesheet" href="/style/style.css">
+    
+    <!-- Link to an external JavaScript file for additional functionality (e.g., login-related logic) -->
     <script src="/javascript/login.js"></script>
 </head>
 
 <body>
+    <!-- Header section containing the page title and navigation -->
     <header>
+        <!-- Top bar displaying the page's purpose -->
         <div class="top-bar">Add New Appointment</div>
+        
+        <!-- Navigation bar with links to other sections of the site -->
         <nav class="navbar">
             <div class="nav-links">
+                <!-- Links to key pages in the hairdresser dashboard -->
                 <a href="/hairdresser/dashboard">Dashboard</a>
                 <a href="/hairdresser/clients">Clients</a>
                 <a href="/hairdresser/services">Services</a>
                 <a href="/hairdresser/schedule">Schedule</a>
+                <!-- Placeholder for dynamic authentication links (e.g., login/logout) -->
                 <a id="auth-links"></a>
             </div>
+            <!-- Salon branding/logo displayed in the navigation bar -->
             <div class="logo">Velvet Touch Salon</div>
         </nav>
     </header>
+    
+    <!-- Table-based form for adding a new appointment -->
     <table class="form-table">
         <tbody>
+            <!-- Row for username input -->
             <tr>
-                <td><label for="username">Username:</label></td>
-                <td><input type="text" id="username" name="username" required></td>
+                <td><label for="username">Username:</label></td> <!-- Label for accessibility -->
+                <td><input type="text" id="username" name="username" required></td> <!-- Required text input for username -->
             </tr>
+            <!-- Row for service input -->
             <tr>
-                <td><label for="service">Service:</label></td>
-                <td><input type="text" id="service" name="service" required></td>
+                <td><label for="service">Service:</label></td> <!-- Label for accessibility -->
+                <td><input type="text" id="service" name="service" required></td> <!-- Required text input for service -->
             </tr>
+            <!-- Row for date input -->
             <tr>
-                <td><label for="date">Date:</label></td>
-                <td><input type="date" id="date" name="date" required></td>
+                <td><label for="date">Date:</label></td> <!-- Label for accessibility -->
+                <td><input type="date" id="date" name="date" required></td> <!-- Required date input for appointment date -->
             </tr>
+            <!-- Row for time input -->
             <tr>
-                <td><label for="time">Time:</label></td>
-                <td><input type="time" id="time" name="time" required></td>
+                <td><label for="time">Time:</label></td> <!-- Label for accessibility -->
+                <td><input type="time" id="time" name="time" required></td> <!-- Required time input for appointment time -->
             </tr>
+            <!-- Row for status input -->
             <tr>
-                <td><label for="status">Status:</label></td>
-                <td><input type="text" id="status" name="status" value="Pending"></td>
+                <td><label for="status">Status:</label></td> <!-- Label for accessibility -->
+                <td><input type="text" id="status" name="status" value="Pending"></td> <!-- Text input with default 'Pending' status -->
             </tr>
+            <!-- Row for the submit button -->
             <tr>
-                <td colspan="2">
+                <td colspan="2"> <!-- Span across two columns for centering -->
+                    <!-- Button to submit the form, styled with classes and an ID for event handling -->
                     <button class="btn yes-btn" id="submitBtn">Add Appointment</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <!-- Inline JavaScript for handling form submission -->
     <script>
+        /*
+         * Handle the submission of the new appointment form.
+         * This script collects appointment data (username, service, date, time, status), sends it to the server via POST,
+         * and redirects to the schedule page or shows an error message on failure.
+         */
         document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            // Prevent the default form submission behavior (e.g., page reload)
             e.preventDefault();
+            
+            // Create an object with appointment data from the form inputs
             const appointmentData = {
-                username: document.getElementById('username').value,
-                service: document.getElementById('service').value,
-                date: document.getElementById('date').value,
-                time: document.getElementById('time').value,
-                status: document.getElementById('status').value
+                username: document.getElementById('username').value, // Get the entered username
+                service: document.getElementById('service').value, // Get the entered service
+                date: document.getElementById('date').value, // Get the selected date
+                time: document.getElementById('time').value, // Get the selected time
+                status: document.getElementById('status').value // Get the entered status
             };
 
+            // Attempt to send the appointment data to the server
             try {
+                // Make an asynchronous POST request to the '/api/appointments/add' endpoint
                 const response = await fetch('/api/appointments/add', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(appointmentData)
+                    method: 'POST', // Use POST method to send data
+                    headers: { 'Content-Type': 'application/json' }, // Specify that the request body is JSON
+                    body: JSON.stringify(appointmentData) // Convert appointment data object to JSON string
                 });
 
+                // Check if the server redirected (indicating success)
                 if (response.redirected) {
+                    // Navigate to the schedule page
                     window.location.href = '/hairdresser/schedule';
                 }
             } catch (error) {
-                console.error('Error adding appointment:', error);
-                alert('Failed to add appointment');
+                // Handle errors during the fetch request
+                console.error('Error adding appointment:', error); // Log error for debugging
+                alert('Failed to add appointment'); // Notify the user of failure
             }
         });
     </script>
