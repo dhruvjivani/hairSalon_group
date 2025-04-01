@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Client</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <!-- Link to external JavaScript file for additional functionality -->
+    <script src="/javascript/login.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Add New Client</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/hairdresser/dashboard">Dashboard</a>
+                <a href="/hairdresser/services">Services</a>
+                <a href="/hairdresser/schedule">Schedule</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <td><label for="name">Name:</label></td>
+                <td><input type="text" id="name" name="name" required></td>
+            </tr>
+            <tr>
+                <td><label for="phone">Phone:</label></td>
+                <td><input type="tel" id="phone" name="phone"></td>
+            </tr>
+            <tr>
+                <td><label for="email">Email:</label></td>
+                <td><input type="email" id="email" name="email"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="btn yes-btn" id="submitBtn">Add Client</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const clientData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value
+            };
+
+            try {
+                const response = await fetch('/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(clientData)
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            } catch (error) {
+                console.error('Error adding client:', error);
+                alert('Failed to add client');
+            }
+        });
+    </script>
+</body>
+
+</html>

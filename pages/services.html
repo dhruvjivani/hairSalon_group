@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hair Salon Booking</title>
+  <link rel="stylesheet" href="../style/style.css">
+  <script src="/javascript/login.js"></script>
+
+  <style>
+    h2 {
+      color: #2c3e50;
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      text-align: center;
+      /* Center headings for better alignment */
+    }
+
+    h3 {
+      color: #2980b9;
+      font-size: 1.5em;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+      /* Center headings for better alignment */
+    }
+
+    /* Container Styling */
+    .container {
+      max-width: 800px;
+      /* Limit width for better readability */
+      margin: 0 auto;
+      /* Center the container horizontally */
+      padding: 20px;
+      /* Add padding inside the container */
+      background-color: #f9f9f9;
+      /* Light background for contrast */
+      border-radius: 10px;
+      /* Rounded corners */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      /* Subtle shadow for depth */
+    }
+
+    /* Hairdresser Dropdown */
+    select {
+      width: 250px;
+      padding: 10px;
+      border: 2px solid #2980b9;
+      border-radius: 5px;
+      font-size: 1.1em;
+      background-color: #fff;
+      color: #2c3e50;
+      margin: 0 auto 20px;
+      /* Center horizontally and add bottom margin */
+      display: block;
+      /* Ensure it behaves as a block to center */
+      transition: all 0.3s ease;
+    }
+
+    select:hover {
+      border-color: #3498db;
+    }
+
+    /* Services List */
+    #servicesList {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 30px;
+      /* Center horizontally and add bottom margin */
+      background-color: #fff;
+      /* White background for services */
+      padding: 15px;
+      /* Add padding inside services list */
+      border-radius: 5px;
+      /* Rounded corners */
+      border: 1px solid #ddd;
+      /* Light border for separation */
+    }
+
+    label {
+      font-size: 1.1em;
+      color: #34495e;
+      margin: 10px 0;
+      cursor: pointer;
+      align-items: center;
+      /* Vertically center content */
+      position: relative;
+      padding: 10px 35px 5px 35px;
+      /* Adjust padding for better spacing */
+      border-bottom: 1px solid #eee;
+      /* Light separator between labels */
+    }
+
+    input[type="checkbox"] {
+      position: absolute;
+      left: 10px;
+      /* Adjusted left position for better alignment */
+      /* bottom: 10px; */
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      padding-bottom: 2px;
+      border: 2px solid #2980b9;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, border 0.3s ease;
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+
+    label span {
+      margin-left: 40px;
+      /* Increased spacing for better readability */
+      flex-grow: 1;
+      /* Allow text to take remaining space */
+      text-align: left;
+      /* Ensure text aligns left within the flex container */
+    }
+
+    /* Total Price */
+    #totalPrice {
+      font-weight: bold;
+      font-size: 1.3em;
+      color: #e74c3c;
+      text-align: center;
+      /* Center the total price */
+      margin-bottom: 20px;
+      /* Add margin below */
+    }
+
+    /* Next Button */
+    button {
+      display: block;
+      /* Ensure button is block level */
+      margin: 0 auto;
+      /* Center the button horizontally */
+      padding: 15px 30px;
+      background-color: #2980b9;
+      color: white;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3498db;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+        margin: 0 10px;
+        /* Reduce margins on smaller screens */
+      }
+
+      select {
+        width: 100%;
+      }
+
+      label {
+        padding: 8px 20px;
+        /* Reduce padding on smaller screens */
+      }
+
+      button {
+        width: 100%;
+        /* Full width button on small screens */
+        padding: 12px 20px;
+        /* Adjust padding */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section with Navigation -->
+  <header>
+    <!-- Top bar with a welcome message -->
+    <div class="top-bar">Styles and Prices</div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="nav-links">
+        <!-- Navigation links to different pages of the website -->
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/service">Services</a>
+        <a href="/location">Location</a>
+        <a id="auth-links"></a>
+      </div>
+      <!-- Logo of the salon -->
+      <div class="logo">Velvet Touch Salon</div>
+    </nav>
+  </header>
+  <div class="container">
+
+    <h2>Select Your Hairdresser</h2>
+    <select id="hairdresserSelect"></select>
+
+    <h2>Select Services</h2>
+    <div id="servicesList"></div>
+
+    <h3>Total Price: $<span id="totalPrice">0.00</span></h3>
+
+    <button id="nextButton">Next</button>
+  </div>
+
+  <script>document.addEventListener("DOMContentLoaded", function () {
+      const hairdresserSelect = document.getElementById("hairdresserSelect");
+      const servicesList = document.getElementById("servicesList");
+      const totalPriceElem = document.getElementById("totalPrice");
+      const nextButton = document.getElementById("nextButton");
+
+      let totalPrice = 0;
+      let selectedServices = [];
+
+      // Fetch hairdressers
+      fetch("/api/stylists")
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(stylist => {
+            let option = document.createElement("option");
+            option.value = stylist._id;
+            option.textContent = stylist.name;
+            hairdresserSelect.appendChild(option);
+          });
+        });
+
+      // Fetch services
+      fetch("/api/services")
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(service => {
+            if (!service.fees) {  // Fix: Use service.fees instead of service.price
+              console.error(`Service ${service.name} is missing a price!`, service);
+              return; // Skip this service
+            }
+
+            let label = document.createElement("label");
+            let checkbox = document.createElement("input");
+
+            let priceValue = typeof service.fees === "string"
+              ? Number(service.fees.replace("$", "").trim()) // Fix: Use service.fees
+              : Number(service.fees); // Ensure it's a number
+
+            if (isNaN(priceValue)) {
+              console.error(`Invalid price for service ${service.name}: ${service.fees}`);
+              return; // Skip if price is invalid
+            }
+
+            checkbox.type = "checkbox";
+            checkbox.value = priceValue;
+            checkbox.dataset.serviceId = service._id;
+            checkbox.addEventListener("change", updateTotal);
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(` ${service.name} - $${priceValue}`));
+            servicesList.appendChild(label);
+            // servicesList.appendChild(document.createElement("br"));
+          });
+        })
+        .catch(error => console.error("Error fetching services:", error));
+
+      // Update total price
+      function updateTotal() {
+        totalPrice = 0;
+        selectedServices = [];
+
+        document.querySelectorAll("#servicesList input:checked").forEach(checkbox => {
+          let price = Number(checkbox.value); // Convert checkbox value to number
+
+          console.log(`Service ID: ${checkbox.dataset.serviceId}, Price: ${checkbox.value}, Parsed: ${price}`); // Debugging
+
+          if (!isNaN(price)) { // Ensure it's a valid number
+            totalPrice += price;
+            selectedServices.push(checkbox.dataset.serviceId);
+          }
+        });
+
+        console.log(`Total Price: ${totalPrice}`); // Debug total price
+        totalPriceElem.textContent = totalPrice.toFixed(2);
+      }
+
+      // Move to the next page
+      nextButton.addEventListener("click", function () {
+        const selectedHairdresser = hairdresserSelect.value;
+
+        if (!selectedHairdresser || selectedServices.length === 0) {
+          alert("Please select a hairdresser and at least one service.");
+          return;
+        }
+
+        const appointmentData = {
+          hairdresser: selectedHairdresser,
+          services: selectedServices,
+          totalPrice: Number(totalPrice).toFixed(2),
+        };
+
+        localStorage.setItem("appointmentData", JSON.stringify(appointmentData));
+        window.location.href = "appointment";
+      });
+    });
+  </script>
+</body>
+
+</html>

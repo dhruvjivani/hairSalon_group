@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Velvet Touch Salon - Main Dashboard</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/javascript/login.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/hairdresser/dashboard">Dashboard</a>
+                <a href="/hairdresser/services">Services</a>
+                <a href="/hairdresser/schedule">Schedule</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+
+    <div class="dashboard">
+        <div class="grid">
+            <a href="/hairdresser/clients" class="card">
+                <div class="icon">👥</div>
+                <h2>Clients</h2>
+                <p>Manage client information</p>
+            </a>
+            <a href="/hairdresser/services" class="card">
+                <div class="icon">✂️</div>
+                <h2>Services</h2>
+                <p>View and edit salon services</p>
+            </a>
+            <a href="/hairdresser/schedule" class="card">
+                <div class="icon">📅</div>
+                <h2>Schedule</h2>
+                <p>Manage appointments</p>
+            </a>
+            <a href="#" class="card">
+                <div class="icon">ℹ️</div>
+                <h2>About</h2>
+                <p>Learn about our salon</p>
+            </a>
+            <a href="#" class="card">
+                <div class="icon">📍</div>
+                <h2>Location</h2>
+                <p>Find our salon</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // No dynamic data needed for this static navigation page
+        // Adding click handlers for accessibility
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    window.location.href = card.getAttribute('href');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/style/signup.css">
+    <script src="/javascript/login.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Welcome to Hair & Beauty Salon</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/service">Services</a>
+                <a href="/location">Location</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="login-container">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Enter username" required>
+            <input type="password" id="loginPassword" placeholder="Enter password" required>
+            <button type="button" onclick="login()">Login</button>
+            <button style="background-color: #222;" onclick="window.location.href='forgot-password'">Forgot password</button>
+            <p id="loginMessage"></p>
+            <p>Create an account? <a href="/signup">Signup here</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Salon - All Rights Reserved</p>
+    </footer>
+</body>
+
+</html>

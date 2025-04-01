@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Services</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/javascript/login.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Our Services</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/hairdresser/dashboard">Dashboard</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <a href="/hairdresser/services">Services</a>
+                <a href="/hairdresser/schedule">Schedule</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+    <button class="btn yes-btn" onclick="addService()" style="margin: 10px;">Add New Service</button>
+    <table id="appointmentsTable">
+        <thead>
+            <tr>
+                <th>Service Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="appointmentBody"></tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchServices();
+
+            async function fetchServices() {
+                try {
+                    const response = await fetch('/api/services');
+                    const services = await response.json();
+                    const appointmentBody = document.getElementById('appointmentBody');
+
+                    appointmentBody.innerHTML = services.map(service => `
+                        <tr data-id="${service._id}">
+                            <td>${service.name || ''}</td>
+                            <td>${service.description || 'N/A'}</td>
+                            <td>$${service.price || '0.00'}</td>
+                            <td>
+                                <button class="btn yes-btn" onclick="editService('${service._id}')">Edit</button>
+                                <button class="btn no-btn" onclick="deleteService('${service._id}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error fetching services:', error);
+                    appointmentBody.innerHTML = '<tr><td colspan="4">Error loading services</td></tr>';
+                }
+            }
+
+            window.editService = function (id) {
+                window.location.href = `/hairdresser/services/edit/${id}`;
+            };
+
+            window.deleteService = async function (id) {
+                if (confirm('Are you sure you want to delete this service?')) {
+                    try {
+                        const response = await fetch(`/api/services/delete/${id}`, {
+                            method: 'DELETE'
+                        });
+                        const result = await response.json();
+                        if (result.message) {
+                            fetchServices();
+                        }
+                    } catch (error) {
+                        console.error('Error deleting service:', error);
+                        alert('Failed to delete service');
+                    }
+                }
+            };
+
+            window.addService = function () {
+                window.location.href = '/hairdresser/services/add';
+            };
+        });
+    </script>
+</body>
+
+</html>

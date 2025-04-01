@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Booking Confirmed</h1>
+        <a href="/stylists">Back to Stylists</a>
+    </header>
+    <main>
+        <div id="confirmation-details">
+            <h2>Thank You for Your Booking!</h2>
+            <p id="confirmation-info">Loading booking details...</p>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Assuming the last booking can be fetched - you might need to pass booking ID
+                const response = await fetch('/api/bookings/last', {
+                    credentials: 'include' // If using sessions
+                });
+                const booking = await response.json();
+
+                document.getElementById('confirmation-info').innerHTML = `
+                    <p>Stylist: ${booking.stylist}</p>
+                    <p>Service: ${booking.service}</p>
+                    <p>Date: ${new Date(booking.date).toLocaleDateString()}</p>
+                    <p>Time: ${booking.time}</p>
+                    <p>Name: ${booking.customerName}</p>
+                    <p>Email: ${booking.customerEmail}</p>
+                `;
+            } catch (error) {
+                console.error('Error loading confirmation:', error);
+                document.getElementById('confirmation-info').innerHTML =
+                    '<p>Your booking was successful, but we couldn\'t load the details.</p>';
+            }
+        });
+    </script>
+</body>
+
+</html>

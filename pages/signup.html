@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="/style/signup.css">
+    <script src="/javascript/login.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Welcome to Hair & Beauty Salon</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/service">Services</a>
+                <a href="/location">Location</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="signup-container">
+            <h2>Signup</h2>
+            <form id="signupForm" onsubmit="event.preventDefault(); signUp();">
+                <div class="input-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <button type="submit">Signup</button>
+                <p id="message" class="message"></p>
+                <p>Already have an account? <a href="/login">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; Salon - All Rights Reserved</p>
+    </footer>
+</body>
+
+</html>

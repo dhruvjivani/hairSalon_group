@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Book an Appointment</h1>
+        <a href="/stylists">Back to Stylists</a>
+    </header>
+    <main>
+        <form id="booking-form">
+            <label for="stylist">Select Stylist:</label>
+            <select id="stylist" name="stylist" required></select>
+
+            <label for="service">Select Service:</label>
+            <select id="service" name="service" required></select>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+
+            <label for="customer-name">Your Name:</label>
+            <input type="text" id="customer-name" name="customerName" required>
+
+            <label for="customer-email">Your Email:</label>
+            <input type="email" id="customer-email" name="customerEmail" required>
+
+            <button type="submit">Book Now</button>
+        </form>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Populate stylists dropdown
+            try {
+                const stylistsResponse = await fetch('/api/stylists');
+                const stylists = await stylistsResponse.json();
+                const stylistSelect = document.getElementById('stylist');
+                stylistSelect.innerHTML = stylists.map(s =>
+                    `<option value="${s._id}">${s.name}</option>`
+                ).join('');
+
+                // Populate services based on selected stylist
+                stylistSelect.addEventListener('change', async () => {
+                    const selectedStylistId = stylistSelect.value;
+                    const stylist = stylists.find(s => s._id === selectedStylistId);
+                    const serviceSelect = document.getElementById('service');
+                    serviceSelect.innerHTML = stylist.services?.map(s =>
+                        `<option value="${s}">${s}</option>`
+                    ).join('') || '<option value="">No services available</option>';
+                });
+                // Trigger initial service population
+                stylistSelect.dispatchEvent(new Event('change'));
+            } catch (error) {
+                console.error('Error loading booking options:', error);
+            }
+
+            // Handle booking submission
+            document.getElementById('booking-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const bookingData = Object.fromEntries(formData);
+
+                try {
+                    const response = await fetch('/api/bookings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(bookingData)
+                    });
+
+                    if (response.ok) {
+                        window.location.href = '/confirmation';
+                    } else {
+                        alert('Booking failed');
+                    }
+                } catch (error) {
+                    console.error('Error booking:', error);
+                    alert('Error making booking');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

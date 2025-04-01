@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Schedule</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/javascript/login.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Schedule</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/hairdresser/dashboard">Dashboard</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <a href="/hairdresser/services">Services</a>
+                <a href="/hairdresser/schedule">Schedule</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+    <button class="btn yes-btn" onclick="addAppointment()" style="margin: 10px;">Add New Appointment</button>
+
+    <table id="appointmentsTable">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Service</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="appointmentBody"></tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAppointments();
+
+            async function fetchAppointments() {
+                try {
+                    const response = await fetch('/api/appointments');
+                    const appointments = await response.json();
+                    const appointmentBody = document.getElementById('appointmentBody');
+
+                    appointmentBody.innerHTML = appointments.map(apt => `
+                        <tr data-id="${apt._id}">
+                            <td>${apt.username || ''}</td>
+                            <td>${apt.service || 'N/A'}</td>
+                            <td>${apt.date || 'N/A'}</td>
+                            <td>${apt.time || 'N/A'}</td>
+                            <td>${apt.status || 'Pending'}</td>
+                            <td>
+                                <button class="btn yes-btn" onclick="editAppointment('${apt._id}')">Edit</button>
+                                <button class="btn no-btn" onclick="deleteAppointment('${apt._id}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error fetching appointments:', error);
+                    appointmentBody.innerHTML = '<tr><td colspan="6">Error loading appointments</td></tr>';
+                }
+            }
+
+            window.editAppointment = function (id) {
+                window.location.href = `/hairdresser/schedule/edit/${id}`;
+            };
+
+            window.deleteAppointment = async function (id) {
+                if (confirm('Are you sure you want to delete this appointment?')) {
+                    try {
+                        const response = await fetch(`/api/appointments/delete/${id}`, {
+                            method: 'DELETE'
+                        });
+                        const result = await response.json();
+                        if (result.message) {
+                            fetchAppointments();
+                        }
+                    } catch (error) {
+                        console.error('Error deleting appointment:', error);
+                        alert('Failed to delete appointment');
+                    }
+                }
+            };
+
+            window.addAppointment = function () {
+                window.location.href = '/hairdresser/schedule/add';
+            };
+        });
+    </script>
+</body>
+
+</html>

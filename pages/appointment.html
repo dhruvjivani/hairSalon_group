@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Stylist and Services</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <script src="/javascript/login.js"></script>
+
+    <style>
+     
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/service">Services</a>
+                <a href="/location">Location</a>
+                <a id="auth-links">Login</a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <form id="schedule-form">
+            <div>
+                <label for="stylist">Select Stylist:</label>
+                <select id="stylist" name="stylist" required>
+                    <option value="" disabled selected>Select a stylist</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="service">Select Service:</label>
+                <select id="service" name="service" required>
+                    <option value="" disabled selected>Select a service</option>
+                </select>
+            </div>
+
+            <div id="service-details" style="display:none;">
+                <p id="fees"></p>
+                <p id="duration"></p>
+            </div>
+
+            <div>
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div>
+                <label for="time">Select Time:</label>
+                <input type="time" id="time" name="time" required>
+            </div>
+
+            <div>
+                <label for="customerName">Your Name:</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+
+            <div>
+                <label for="customerEmail">Your Email:</label>
+                <input type="email" id="customerEmail" name="customerEmail" required>
+            </div>
+
+            <div>
+                <button type="submit" id="book-btn">Book Appointment</button>
+            </div>
+
+            <div>
+                <p id="confirmation-message"></p>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        © 2025 Velvet Touch Salon. All Rights Reserved.
+    </footer>
+
+    <script>
+        // Fetch all stylists and populate the stylist dropdown
+        async function fetchStylists() {
+            try {
+                const response = await fetch('/api/stylists');
+                if (!response.ok) throw new Error(`Failed to load stylists: ${response.status}`);
+                const stylists = await response.json();
+                console.log('Stylists fetched:', stylists); // Debug log
+                const stylistSelect = document.getElementById('stylist');
+
+                stylistSelect.innerHTML = '<option value="" disabled selected>Select a stylist</option>';
+                stylists.forEach(stylist => {
+                    const option = document.createElement('option');
+                    // console.log(stylist._id)
+                    option.value = stylist._id || ''; // Ensure value is set, default to empty string if null
+                    option.textContent = stylist.name;
+                    stylistSelect.appendChild(option);
+                    console.log(`Added stylist: ${stylist.name} with ID: ${stylist._id || 'null'}`);
+                });
+            } catch (error) {
+                console.error('Error fetching stylists:', error);
+                document.getElementById('confirmation-message').textContent = 'Error loading stylists';
+                document.getElementById('confirmation-message').style.color = 'red';
+            }
+        }
+
+        // Fetch all services (no stylist dependency)
+        async function fetchServices() {
+            try {
+                console.log('Fetching all services...');
+                const response = await fetch('/api/services');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to load services: ${response.status} - ${errorText}`);
+                }
+                const services = await response.json();
+                console.log('Services fetched:', services);
+
+                const serviceSelect = document.getElementById('service');
+                serviceSelect.innerHTML = '<option value="" disabled selected>Select a service</option>';
+                services.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service._id || ''; // Ensure value is set, default to empty string if null
+                    option.textContent = service.name;
+                    option.dataset.fees = service.fees || 'N/A';
+                    option.dataset.duration = service.duration || 'N/A';
+                    serviceSelect.appendChild(option);
+                    console.log(`Added service: ${service.name} with ID: ${service._id || 'null'}`);
+                });
+                serviceSelect.disabled = false;
+                document.getElementById('confirmation-message').textContent = ''; // Clear any previous error
+            } catch (error) {
+                console.error('Error fetching services:', error);
+                document.getElementById('confirmation-message').textContent = error.message;
+                document.getElementById('confirmation-message').style.color = 'red';
+            }
+        }
+
+        // Display service details when a service is selected
+        function displayServiceDetails(serviceId) {
+            const serviceSelect = document.getElementById('service');
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            const serviceDetails = document.getElementById('service-details');
+            const fees = document.getElementById('fees');
+            const duration = document.getElementById('duration');
+
+            if (selectedOption.value) {
+                fees.textContent = `Fees: ${selectedOption.dataset.fees}`;
+                duration.textContent = `Duration: ${selectedOption.dataset.duration}`;
+                serviceDetails.style.display = 'block';
+            } else {
+                serviceDetails.style.display = 'none';
+            }
+        }
+
+        // Event listeners and form submission
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStylists();
+            fetchServices(); // Fetch services when the page loads, no stylist needed
+
+            const stylistSelect = document.getElementById('stylist');
+            const serviceSelect = document.getElementById('service');
+            const form = document.getElementById('schedule-form');
+            const confirmationMessage = document.getElementById('confirmation-message');
+
+            stylistSelect.addEventListener('change', event => {
+                const stylistId = event.target.value;
+                console.log('Stylist selected:', stylistId); // Debug log
+                if (stylistId && stylistId !== '') {
+                    console.log('Stylist changed, but services are global.');
+                } else {
+                    console.log('No valid stylist selected');
+                    confirmationMessage.textContent = 'Please select a stylist';
+                    confirmationMessage.style.color = 'red';
+                }
+            });
+
+            serviceSelect.addEventListener('change', event => {
+                const serviceId = event.target.value;
+                console.log('Service selected:', serviceId); // Debug log
+                displayServiceDetails(serviceId);
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                let scheduleData = Object.fromEntries(formData);
+
+                // Ensure stylist and service IDs are captured correctly
+                scheduleData.stylist = stylistSelect.value || null; // Get the selected stylist ID
+                scheduleData.service = serviceSelect.value || null; // Get the selected service ID
+
+                // Log the data to debug
+                console.log('Submitting schedule data:', scheduleData);
+
+                // Check if required fields are present
+                if (!scheduleData.stylist || !scheduleData.service) {
+                    confirmationMessage.textContent = 'Please select both a stylist and a service';
+                    confirmationMessage.style.color = 'red';
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/schedule', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(scheduleData)
+                    });
+
+                    if (response.ok) {
+                        confirmationMessage.textContent = 'Appointment scheduled successfully!';
+                        confirmationMessage.style.color = 'green';
+                        form.reset();
+                        serviceSelect.disabled = false; // Keep services enabled
+                        document.getElementById('service-details').style.display = 'none';
+                        setTimeout(() => {
+                            window.location.href = "/services";
+                        }, 2000);
+                    } else {
+                        throw new Error('Scheduling failed');
+                    }
+                } catch (error) {
+                    console.error('Error scheduling appointment:', error);
+                    confirmationMessage.textContent = 'Failed to schedule appointment';
+                    confirmationMessage.style.color = 'red';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

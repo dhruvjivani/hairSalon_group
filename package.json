@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongodb": "^6.15.0",
+    "path": "^0.12.7"
+  },
+  "name": "group_assignment-2",
+  "version": "1.0.0",
+  "description": "Hair Salon Scheduler - README",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

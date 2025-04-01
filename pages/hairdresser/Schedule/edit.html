@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Appointment</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/javascript/login.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Edit Appointment</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/hairdresser/dashboard">Dashboard</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <a href="/hairdresser/services">Services</a>
+                <a href="/hairdresser/schedule">Schedule</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <td><label for="username">Username:</label></td>
+                <td><input type="text" id="username" name="username" required></td>
+            </tr>
+            <tr>
+                <td><label for="service">Service:</label></td>
+                <td><input type="text" id="service" name="service" required></td>
+            </tr>
+            <tr>
+                <td><label for="date">Date:</label></td>
+                <td><input type="date" id="date" name="date" required></td>
+            </tr>
+            <tr>
+                <td><label for="time">Time:</label></td>
+                <td><input type="time" id="time" name="time" required></td>
+            </tr>
+            <tr>
+                <td><label for="status">Status:</label></td>
+                <td><input type="text" id="status" name="status"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="btn yes-btn" id="submitBtn">Update Appointment</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const id = window.location.pathname.split('/').pop();
+
+            try {
+                const response = await fetch(`/api/appointments/${id}`);
+                const appointment = await response.json();
+
+                document.getElementById('username').value = appointment.username || '';
+                document.getElementById('service').value = appointment.service || '';
+                document.getElementById('date').value = appointment.date || '';
+                document.getElementById('time').value = appointment.time || '';
+                document.getElementById('status').value = appointment.status || '';
+            } catch (error) {
+                console.error('Error loading appointment:', error);
+            }
+
+            document.getElementById('submitBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                const appointmentData = {
+                    username: document.getElementById('username').value,
+                    service: document.getElementById('service').value,
+                    date: document.getElementById('date').value,
+                    time: document.getElementById('time').value,
+                    status: document.getElementById('status').value
+                };
+
+                try {
+                    const response = await fetch(`/api/appointments/edit/${id}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(appointmentData)
+                    });
+
+                    if (response.redirected) {
+                        window.location.href = '/hairdresser/schedule';
+                    }
+                } catch (error) {
+                    console.error('Error updating appointment:', error);
+                    alert('Failed to update appointment');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Service</title>
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/javascript/login.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Add New Service</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/hairdresser/dashboard">Dashboard</a>
+                <a href="/hairdresser/clients">Clients</a>
+                <a href="/hairdresser/services">Services</a>
+                <a href="/hairdresser/schedule">Schedule</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <td><label for="name">Service Name:</label></td>
+                <td><input type="text" id="name" name="name" required></td>
+            </tr>
+            <tr>
+                <td><label for="description">Description:</label></td>
+                <td><input type="text" id="description" name="description"></td>
+            </tr>
+            <tr>
+                <td><label for="price">Price:</label></td>
+                <td><input type="number" id="price" name="price" step="0.01" required></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="btn yes-btn" id="submitBtn">Add Service</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const serviceData = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: parseFloat(document.getElementById('price').value)
+            };
+
+            try {
+                const response = await fetch('/api/services/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(serviceData)
+                });
+
+                if (response.redirected) {
+                    window.location.href = '/hairdresser/services';
+                }
+            } catch (error) {
+                console.error('Error adding service:', error);
+                alert('Failed to add service');
+            }
+        });
+    </script>
+</body>
+
+</html>

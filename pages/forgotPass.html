@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="/style/signup.css">
+    <style>
+        .login-container input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #333;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+    </style>
+    <script src="/javascript/forgotpass.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="top-bar">Welcome to Hair & Beauty Salon</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/service">Services</a>
+                <a href="/location">Location</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="login-container">
+            <h2>Forgot Password</h2>
+            <p>Please enter your username or email to reset your password.</p>
+            <input type="text" id="forgotUsername" placeholder="Enter username or email" required>
+            <button type="button" onclick="resetPassword()">Reset Password</button>
+            <button style="background-color: #222;" onclick="window.location.href='/login'">Back to Login</button>
+            <p id="resetMessage"></p>
+            <p>Remembered your password? <a href="/login">Login here</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© Salon - All Rights Reserved</p>
+    </footer>
+    <script>
+        // forgotpass.js
+        function resetPassword() {
+            const username = document.getElementById('forgotUsername').value;
+            const message = document.getElementById('resetMessage');
+
+            if (!username) {
+                message.style.color = 'red';
+                message.textContent = 'Please enter a username or email.';
+                return;
+            }
+
+            // Simulate an API call (replace with actual backend logic)
+            message.style.color = 'green';
+            message.textContent = 'If an account exists, a reset link has been sent to your email.';
+            document.getElementById('forgotUsername').value = '';
+
+            // Example API call (uncomment and adjust for your backend)
+            /*
+            fetch('/api/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            })
+            .then(response => response.json())
+            .then(data => {
+                message.style.color = data.success ? 'green' : 'red';
+                message.textContent = data.message;
+            })
+            .catch(error => {
+                message.style.color = 'red';
+                message.textContent = 'An error occurred. Please try again.';
+            });
+            */
+        }
+    </script>
+</body>
+
+</html>

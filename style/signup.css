@@ -1,0 +1,220 @@
+/* General Reset */
+* {
+  margin: 15px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f8f8f8;
+}
+/* Dark Theme Header */
+header {
+  background: #222;
+  padding: 10px 0;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Top Bar */
+.top-bar {
+  text-align: center;
+  background: #333;
+  color: #ffcc00;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0;
+  border-bottom: 2px solid #ffcc00;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffcc00;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 500;
+  padding: 8px 15px;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Hover Effect */
+.nav-links a:hover {
+  background: #ffcc00;
+  color: #222;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bolder;
+  color: yellowgreen;
+}
+/* end for nav */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* White background for contrast */
+  border-radius: 10px; /* Smooth rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+}
+
+/* css for navigation bar is starting from here */
+h2 {
+  color: #333;
+}
+
+/* Here is css for signup page */
+.signup-container {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Button Styles */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: palevioletred;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Error and Success Messages */
+.error-message {
+  color: #ff4d4d;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.message {
+  color: green;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+/* Login Container Styles */
+.login-container {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Login Form Elements */
+#loginUsername,
+#loginPassword {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.login-container h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #f16969;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+  background-color: #f16969;
+}
+
+#loginMessage {
+  font-size: 0.9em;
+  color: green;
+  margin-top: 10px;
+}
+
+/* Footer Section: Styling for the footer at the bottom of the page */
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #222;
+  color: #ffcc00;
+  font-size: 14px;
+  position: relative;
+}
+
+footer a {
+  color: #ffcc00;
+  text-decoration: none;
+}
+
+/* Footer Link Hover Effect: Underlines the footer link on hover */
+footer a:hover {
+  text-decoration: underline;
+}

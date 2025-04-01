@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta tags for character encoding, compatibility, and responsive design -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link to external stylesheet for styling the page -->
+    <link rel="stylesheet" href="/style/style.css">
+
+    <!-- Title of the page displayed on the browser tab -->
+    <title>Awesome Florists</title>
+</head>
+
+<body>
+    <!-- Header Section: Contains the top bar and navigation menu -->
+    <header>
+        <div class="top-bar">Welcome to Hair & Beauty Salon</div>
+        <nav class="navbar">
+            <div class="nav-links">
+                <!-- Navigation links to other pages of the website -->
+                <a href="/pages">Home</a>
+                <a href="/about">About</a>
+                <a href="/service">Services</a>
+                <a href="/location">Location</a>
+                <a id="auth-links"></a>
+            </div>
+            <div class="logo">Velvet Touch Salon</div>
+        </nav>
+    </header>
+
+    <!-- Main Content Section: Allows users to book appointments -->
+    <main class="book">
+        <h2>Book Your Appointments Here!</h2>
+
+        <!-- Service cards: Display different salon services for booking -->
+        <div class="cards">
+            <article class="salon">
+                <h3>Hair Cutting</h3>
+                <p>Only $50 for a stylish cut and trim.</p>
+                <img src="/images/1.png" alt="Hair Cutting">
+                <!-- Button to navigate to the service booking page -->
+                <button onclick="window.location.href='/services'">Book</button>
+            </article>
+
+            <article class="salon">
+                <h3>Hair Sprays</h3>
+                <p>Only $20 for a fresh look with our premium sprays.</p>
+                <img src="/images/2.png" alt="Hair Sprays">
+                <button onclick="window.location.href='/services'">Book</button>
+            </article>
+
+            <article class="salon">
+                <h3>Hair Wash</h3>
+                <p>Only $30 for a relaxing hair wash with deep conditioning.</p>
+                <img src="/images/3.png" alt="Hair Wash">
+                <button onclick="window.location.href='/services'">Book</button>
+            </article>
+        </div>
+
+        <!-- New Section for Scheduling Appointments: Call-to-action for scheduling -->
+        <div>
+            <section class="schedule-section">
+                <h3>Ready to Schedule Your Appointment?</h3>
+                <p>Click below to get started with booking your service.</p>
+                <p>If You Want to Stay With Us Please Login. You Get Extra</p>
+                <!-- Link to the client registration page -->
+                <a href="registerClient" class="schedule-button">Schedule Appointment</a>
+            </section>
+
+            <!-- Welcome Section for Returning Customers: Highlights benefits for logged-in clients -->
+            <div class="welcome-section">
+                <h1>Welcome Back, Special Customer! 🎉</h1>
+                <p>We're thrilled to have you with us! As a loyal client, you get exclusive perks:</p>
+                <ul>
+                    <p>💎 Exclusive discounts on all services</p>
+                    <p>📅 Priority booking for peak hours</p>
+                    <p>🎁 Personalized offers directly to your inbox</p>
+                    <p>🔥 Be the first to know about upcoming promotions</p>
+                </ul>
+                <p>Stay connected by logging in and never miss amazing deals! 💖</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Section: Contains copyright information -->
+    <footer>
+        <p>&copy; Salon - All Rights Reserved</p>
+    </footer>
+    <script src="/javascript/login.js"></script>
+
+</body>
+
+</html>

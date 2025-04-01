@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Stylists</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <header>
+        <h1>Our Stylists</h1>
+        <nav>
+            <a href="/booking">Book Appointment</a>
+        </nav>
+    </header>
+    <main>
+        <div id="stylist-nav">
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn">Next</button>
+        </div>
+        <div id="stylist-info">
+            <h2 id="stylist-name"></h2>
+            <div id="stylist-schedule"></div>
+            <div id="stylist-services"></div>
+            <div id="stylist-fees"></div>
+            <div id="stylist-duration"></div>
+        </div>
+    </main>
+    <script>
+        let currentStylistIndex = 0;
+        let stylists = [];
+
+        async function fetchStylists() {
+            try {
+                const response = await fetch('/api/stylists'); // Assuming this endpoint exists
+                stylists = await response.json();
+                displayStylist(currentStylistIndex);
+            } catch (error) {
+                console.error('Error fetching stylists:', error);
+                document.getElementById('stylist-info').innerHTML = '<p>Error loading stylists</p>';
+            }
+        }
+
+        function displayStylist(index) {
+            if (stylists.length === 0) return;
+            const stylist = stylists[index];
+            document.getElementById('stylist-name').textContent = stylist.name;
+            document.getElementById('stylist-schedule').innerHTML = `
+                <h3>Schedule</h3>
+                <p>${stylist.schedule || 'Schedule not available'}</p>
+            `;
+            document.getElementById('stylist-services').innerHTML = `
+                <h3>Services</h3>
+                <ul>${stylist.services?.map(s => `<li>${s}</li>`).join('') || 'No services listed'}</ul>
+            `;
+            document.getElementById('stylist-fees').innerHTML = `
+                <h3>Fees</h3>
+                <p>${stylist.fees || 'Fees not specified'}</p>
+            `;
+            document.getElementById('stylist-duration').innerHTML = `
+                <h3>Duration</h3>
+                <p>${stylist.duration || 'Duration not specified'}</p>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStylists();
+
+            document.getElementById('prev-btn').addEventListener('click', () => {
+                currentStylistIndex = (currentStylistIndex - 1 + stylists.length) % stylists.length;
+                displayStylist(currentStylistIndex);
+            });
+
+            document.getElementById('next-btn').addEventListener('click', () => {
+                currentStylistIndex = (currentStylistIndex + 1) % stylists.length;
+                displayStylist(currentStylistIndex);
+            });
+        });
+    </script>
+</body>
+</html>
