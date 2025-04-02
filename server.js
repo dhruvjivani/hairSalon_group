@@ -186,44 +186,14 @@ app.get("/api/services", async (req, res) => {
   res.json(services); // Send the services as a JSON response
 });
 
-// Route to get services for a specific stylist by ID
-app.get("/api/stylists/:id/services", async (req, res) => {
-  const db = await connectDB(); // Connect to the database
-  const stylistId = req.params.id; // Extract the stylist ID from the URL
-
-  try {
-    // Log the request for debugging purposes
-    console.log(`Fetching services for stylist ID: ${stylistId}`);
-
-    // Find the stylist by converting the string ID to an ObjectId
-    const stylist = await db
-      .collection("stylists")
-      .findOne({ _id: new ObjectId(stylistId) });
-    console.log(stylist); // Log the stylist data for debugging
-    if (!stylist) {
-      console.log(`Stylist with ID ${stylistId} not found`); // Log if stylist is not found
-      return res.status(404).json({ message: "Stylist not found" }); // Send 404 response
-    }
-
-    // Log the stylist data to verify the services array
-    console.log("Stylist found:", stylist);
-
-    // Fetch services referenced in the stylist's services array
-    const services = await db
-      .collection("services")
-      .find({
-        _id: { $in: stylist.services.map((id) => new ObjectId(id.$oid)) }, // Map service IDs to ObjectIds
-      })
-      .toArray();
-
-    // Log the retrieved services for debugging
-    console.log("Services retrieved:", services);
-
-    res.json(services); // Send the services as a JSON response
-  } catch (error) {
-    console.error("Error fetching services:", error); // Log any errors
-    res.status(500).json({ message: "Server error", error: error.message }); // Send 500 response with error details
-  }
+// Get Client by ID
+app.get("/api/services/:id", async (req, res) => {
+  const db = await connectDB();
+  const { id } = req.params;
+  const client = await db
+    .collection("services")
+    .findOne({ _id: new ObjectId(id) });
+  res.json(client);
 });
 
 // Route to add a new service
@@ -242,6 +212,7 @@ app.post("/api/services/edit/:id", async (req, res) => {
   await db
     .collection("services")
     .updateOne({ _id: new ObjectId(id) }, { $set: updatedData }); // Update the service
+  console.log(updatedData);
   res.redirect("/hairdresser/services"); // Redirect to the services page
 });
 
