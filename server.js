@@ -295,6 +295,15 @@ app.post("/api/appointments/edit/:id", async (req, res) => {
   res.redirect("/hairdresser/schedule"); // Redirect to the schedule page
 });
 
+app.patch("/api/appointments/:id/status", async (req, res) => {
+  const db = await connectDB(); // Connect to the database
+  const { id } = req.params; // Extract the appointment ID from the URL
+  const updatedData = req.body; // Get the updated appointment data from the request body
+  await db
+    .collection("appointments")
+    .updateOne({ _id: new ObjectId(id) }, { $set: updatedData }); // Update the appointment
+  res.redirect("/hairdresser/schedule"); // Redirect to the schedule page
+})
 // Route to delete an appointment
 app.delete("/api/appointments/delete/:id", async (req, res) => {
   const db = await connectDB(); // Connect to the database
